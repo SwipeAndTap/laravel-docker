@@ -27,11 +27,7 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-di
 
 ## Install Node and tools
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
-    apt-get install -y nodejs && \
-    npm install -g \
-    grunt-cli \
-    gulp-cli \
-    bower
+    apt-get install -y nodejs
 
 ## Install Yarn
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - &&\
