@@ -1,4 +1,4 @@
-FROM php:7.1-fpm
+FROM php:7.2-fpm
 
 LABEL maintainer="Aaron Bell <aaron.bell@swipeandtap.co.uk>"
 
@@ -10,7 +10,15 @@ RUN apt-get update && apt-get install -y \
     wget \
     xvfb \
     libfreetype6-dev \
-    libjpeg62-turbo-dev
+    libjpeg62-turbo-dev \
+    gnupg2\
+    libzip-dev \
+    zip \
+  && docker-php-ext-configure zip --with-libzip \
+  && docker-php-ext-install \
+    zip \
+    mysqli \
+    calendar
 
 ## Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
@@ -22,11 +30,7 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-di
 
 ## Install Node and tools
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
-    apt-get install -y nodejs && \
-    npm install -g \
-    grunt-cli \
-    gulp-cli \
-    bower
+    apt-get install -y nodejs
 
 ## Install Yarn
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - &&\
