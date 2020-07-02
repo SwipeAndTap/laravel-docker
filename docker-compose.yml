@@ -9,12 +9,14 @@ services:
        - "./my_custom_proxy_settings.conf:/etc/nginx/conf.d/my_custom_proxy_settings.conf"
     volumes_from:
       - php
+
   php:
     build:
       context: php
     volumes:
       - ./code:/var/www
       - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+
   mysql:
     image: mysql:5.7
     ports:
@@ -23,6 +25,21 @@ services:
       - ./storage/mysql:/var/lib/mysql
     env_file:
       - .env.mysql
+
   browser:
     hostname: browser
     image: selenium/standalone-chrome
+
+  phpmyadmin:
+    build: phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_USER=lvdock
+      - PMA_PASSWORD=secret
+      - PMA_HOST=mysql
+    volumes:
+      - ./phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
+    ports:
+      - "8889:80"
+    depends_on:
+      - mysql
