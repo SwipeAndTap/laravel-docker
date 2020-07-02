@@ -32,14 +32,11 @@ services:
 
   phpmyadmin:
     build: phpmyadmin
-    environment:
-      - PMA_ARBITRARY=1
-      - PMA_USER=lvdock
-      - PMA_PASSWORD=secret
-      - PMA_HOST=mysql
-    volumes:
-      - ./phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
     ports:
       - "8889:80"
+    volumes:
+      - ./phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
+    env_file:
+      - .env.phpmyadmin
     depends_on:
       - mysql
